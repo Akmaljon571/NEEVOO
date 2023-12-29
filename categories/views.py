@@ -1,4 +1,5 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import BasePermission
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -15,6 +16,7 @@ class IsSuperuserOrReadOnly(BasePermission):
 
 
 class CategoriesALLView(ListCreateAPIView):
+    parser_classes = (FileUploadParser,)
     queryset = CategoriesModel.objects.all()
     serializer_class = CategoriesSerializer
     permission_classes = (IsSuperuserOrReadOnly,)
@@ -23,6 +25,7 @@ class CategoriesALLView(ListCreateAPIView):
 
 
 class CategoriesOneView(RetrieveUpdateDestroyAPIView):
+    parser_classes = (FileUploadParser,)
     queryset = CategoriesModel.objects.all()
     serializer_class = CategoriesSerializer
     permission_classes = (IsSuperuserOrReadOnly,)
