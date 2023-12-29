@@ -29,11 +29,13 @@ INSTALLED_APPS = [
     'rest_framework',
     "corsheaders",
     'drf_yasg',
+    'django_filters',
 
     # Local
     'categories.apps.CategoriesConfig',
     'course.apps.CourseConfig',
     'take.apps.TakeConfig',
+    'video.apps.VideoConfig',
 ]
 
 MIDDLEWARE = [
