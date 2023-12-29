@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import categories.apps
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -30,8 +32,11 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'rest_framework',
     "corsheaders",
+    'django_filters',
+
 
     # Local
+    'categories.apps.CategoriesConfig',
 ]
 
 MIDDLEWARE = [
