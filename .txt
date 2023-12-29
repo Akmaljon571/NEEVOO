@@ -1,0 +1,14 @@
+premium
+    4 xil turi boladi
+    take user id va premium id boglab turadi
+    get-da frontend-ga chiqadi va CUD admin ozgartiradi
+    create
+    update
+    all
+    delete
+
+take
+    create id bilan
+    all admin uchun premium malumotlari bilan
+    delete osha osha
+    get user uchun history boladi. Premium malumotlari va active True or active False + sana
