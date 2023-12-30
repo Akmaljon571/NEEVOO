@@ -1,2 +1,0 @@
-take
-    get user uchun history boladi. Premium malumotlari va active True or active False + sana
