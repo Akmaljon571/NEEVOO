@@ -1,8 +1,10 @@
 from django.urls import path
 
-from .views import TakeAll, TakeDelete
+from .views import TakeAdmin, TakeDelete, TakeCreate, TakeUser
 
 urlpatterns = [
-    path('', TakeAll.as_view()),
-    path('<int:pk>/', TakeDelete.as_view())
+    path('admin/', TakeAdmin.as_view()),
+    path('user/', TakeUser.as_view()),
+    path('create/', TakeCreate.as_view()),
+    path('delete/<int:pk>/', TakeDelete.as_view())
 ]
