@@ -26,6 +26,7 @@ urlpatterns = [
   path('take/', include('take.urls')),
   path('video/', include('video.urls')),
   path('premium/', include('premium.urls')),
+  path('user/', include('user.urls')),
   path('api-auth/', include('rest_framework.urls')),
   path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
   path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     "corsheaders",
     'drf_yasg',
     'django_filters',
+    'rest_framework_simplejwt',
+    'django_redis',
 
     # Local
     'categories.apps.CategoriesConfig',
@@ -38,6 +40,12 @@ INSTALLED_APPS = [
     'video.apps.VideoConfig',
     'premium.apps.PremiumConfig',
 ]
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     ],
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -49,6 +57,26 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'akmaljondev12@gmail.com'
+EMAIL_HOST_PASSWORD = 'caet hcss gvkz wxwi'
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",  # Update with your Redis server details
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
 ROOT_URLCONF = 'config.urls'
 
