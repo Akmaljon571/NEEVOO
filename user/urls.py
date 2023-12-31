@@ -10,4 +10,5 @@ urlpatterns = [
     path('refresh/', TokenRefreshView.as_view()),
     path('admin/all/', ListAdminView.as_view()),
     path('profile/', UserProfileDetail.as_view()),
+    path('history/count', HistoryCount.as_view()),
 ]

@@ -9,6 +9,9 @@ from django.contrib.auth.models import User
 from rest_framework.filters import SearchFilter
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from categories.models import CategoriesModel
+from course.models import CourseModel
+from video.models import VideoModel
 from .pagination import CustomPageNumberPagination
 from .serializers import *
 from .utils import send_email
@@ -135,3 +138,12 @@ class UserProfileDetail(RetrieveUpdateAPIView):
     def get(self, request, **kwargs):
         serializer = UserLoginSerializer(request.user)
         return Response(serializer.data)
+
+
+class HistoryCount(APIView):
+    def get(self, request):
+        categories = CategoriesModel.objects.all().count()
+        courses = CourseModel.objects.all().count()
+        videos = VideoModel.objects.all().count()
+        users = User.objects.all().count()
+        return Response({"yonalish": categories, "course": courses, "video": videos, "user": users})
