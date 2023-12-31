@@ -1,23 +1,40 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.generics import UpdateAPIView, DestroyAPIView, ListAPIView, CreateAPIView
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from video.models import VideoModel
 from .models import CourseModel
-from .serializers import CourseSerializer
+from .serializers import CourseSerializer, CourseAllSerializer
 from categories.permissions import IsSuperuserOrReadOnly
 from categories.models import CategoriesModel
 
 
-class CourseAllView(ListCreateAPIView):
+class CourseAllView(APIView):
     permission_classes = (IsSuperuserOrReadOnly,)
-    serializer_class = CourseSerializer
+    serializer_class = CourseAllSerializer
     queryset = CourseModel.objects.all()
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['title']
-    parser_classes = (FileUploadParser,)
+
+    def get(self, request, *args, **kwargs):
+        courses = CourseModel.objects.all()
+        serialized_courses = CourseAllSerializer(courses, many=True).data
+
+        for course_data in serialized_courses:
+            course_id = course_data['id']
+            videos_count = VideoModel.objects.filter(video_course=course_id).count()
+            course_data['video_count'] = videos_count
+
+        return Response(serialized_courses)
+
+
+class CourseCreateView(CreateAPIView):
+    permission_classes = (IsSuperuserOrReadOnly,)
+    serializer_class = CourseSerializer
+    queryset = CourseModel.objects.all()
 
 
 class CourseUpdateView(UpdateAPIView):
