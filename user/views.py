@@ -70,13 +70,15 @@ class PasswordCodeView(CreateAPIView):
         code = request.data.get('code')
         new_password = request.data.get('new_password')
         data = cache.get(code)
-        user = request.user
-
+        
         if not data:
             return Response({'message': 'Code Invalid', "status": status.HTTP_400_BAD_REQUEST})
-
-        user.set_password(new_password)
-        user.save()
+        try:
+            user = User.objects.get(username=data['email'])
+            user.set_password(new_password)
+            user.save()
+        except:
+            return Response({'message': 'Code Invalid', "status": status.HTTP_400_BAD_REQUEST})
 
         return Response({'message': 'Password updated successfully'}, status=status.HTTP_200_OK)
 
