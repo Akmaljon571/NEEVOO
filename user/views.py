@@ -7,13 +7,10 @@ from django.core.cache import cache
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.filters import SearchFilter
-from rest_framework_simplejwt.tokens import RefreshToken
-from datetime import datetime
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError, AccessToken
 
 from categories.models import CategoriesModel
 from course.models import CourseModel
-from take.models import TakeModel
-from take.serializers import TakeSerializer
 from video.models import VideoModel
 from .pagination import CustomPageNumberPagination
 from .serializers import *
@@ -116,15 +113,17 @@ class TokenRefreshView(APIView):
             return Response({'error': 'Refresh token is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Validate the refresh token
-            RefreshToken(refresh_token)
-        except Exception as e:
-            return Response({'error': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+            refresh = RefreshToken(refresh_token)
+            refresh.verify()
+        except TokenError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-        # If the refresh token is valid, generate a new access token
-        new_access_token = RefreshToken(refresh_token).access_token
+        # Check if the token is an access token
+        if not isinstance(refresh.access_token, AccessToken):
+            return Response({'error': 'Token has wrong type'}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({'access_token': str(new_access_token)}, status=status.HTTP_200_OK)
+        new_access_token = str(refresh.access_token)
+        return Response({'access_token': new_access_token}, status=status.HTTP_200_OK)
 
 
 class ListAdminView(ListAPIView):
