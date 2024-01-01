@@ -1,6 +1,6 @@
 from rest_framework.generics import CreateAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.parsers import FileUploadParser
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -15,7 +15,7 @@ from take.serializers import TakeSerializer
 class VideoAllView(APIView):
     def get(self, request, pk):
         user_id = request.user.id
-
+        print(request.user)
         videos = VideoModel.objects.filter(video_course=pk)
         serializer = VideoSerializers(videos, many=True)
         serialized_data = serializer.data
