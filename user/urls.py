@@ -11,4 +11,5 @@ urlpatterns = [
     path('admin/all/', ListAdminView.as_view()),
     path('profile/', UserProfileDetail.as_view()),
     path('history/count/', HistoryCount.as_view()),
+    path('history/', HistoryApi.as_view()),
 ]

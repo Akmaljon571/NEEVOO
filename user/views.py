@@ -8,9 +8,12 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.filters import SearchFilter
 from rest_framework_simplejwt.tokens import RefreshToken
+from datetime import datetime
 
 from categories.models import CategoriesModel
 from course.models import CourseModel
+from take.models import TakeModel
+from take.serializers import TakeSerializer
 from video.models import VideoModel
 from .pagination import CustomPageNumberPagination
 from .serializers import *
@@ -149,3 +152,24 @@ class HistoryCount(APIView):
         videos = VideoModel.objects.all().count()
         users = User.objects.all().count()
         return Response({"yonalish": categories, "course": courses, "video": videos, "user": users})
+
+
+class HistoryApi(APIView):
+    def get(self, request):
+        user_id = request.user.id
+
+        allTakes = TakeModel.objects.filter(user=user_id)
+        if not len(allTakes):
+            return Response({"status": False, "data": []})
+
+        take_serializer = TakeSerializer(allTakes, many=True)
+        take_data = take_serializer.data
+        day = datetime.now()
+        take_result = []
+        for take in take_data:
+            date_s = '.'.join(dict(take)['finish_date'].split('-')[::-1])
+            finish_date = datetime.strptime(date_s, '%d.%m.%Y')
+            take['status'] = finish_date > day
+            take_result.append(take)
+
+        return Response(take_result)
